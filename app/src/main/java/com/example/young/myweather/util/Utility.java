@@ -1,10 +1,13 @@
 package com.example.young.myweather.util;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.example.young.myweather.db.City;
 import com.example.young.myweather.db.County;
 import com.example.young.myweather.db.Province;
+import com.example.young.myweather.gson.Weather;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,5 +86,17 @@ public class Utility {
             }
         }
         return false;
+    }
+    @Nullable
+    public static Weather handleWeatherResponse(String response){
+        try{
+            JSONObject jsonObject=new JSONObject(response);
+            JSONArray jsonArray=jsonObject.getJSONArray("HeWeather");
+            String weatherContent=jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
